@@ -1,0 +1,30 @@
+body.container-fluid{
+	background-color: #eadbff;
+	text-align: center;
+	font-family: 'Roboto', sans-serif;
+	max-width: 350px;
+	margin: 100px !important;
+}
+
+.morepadding{
+
+}
+
+.analysis {
+	color: #73b3f4;
+	font-size: 40px;
+	font-weight: 100;
+	text-align: center;
+
+}
+
+.howto {
+	font-weight: bold;
+	margin: 0 0 10% 0;
+	text-align: center;
+
+}
+
+.picture {
+	margin: 0 0 0 10%;
+}
