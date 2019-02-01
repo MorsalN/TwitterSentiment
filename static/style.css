@@ -1,9 +1,20 @@
+body {
+	text-align: center;
+}
 body.container-fluid{
-	background-color: #eadbff;
+	background-color: #e8c7ed;
 	text-align: center;
 	font-family: 'Roboto', sans-serif;
-	max-width: 350px;
-	margin: 100px !important;
+	margin: 100px 0 0 0;
+	width: 100%;
+	background-image: url("cloudpic.png");
+    background-repeat: no-repeat;
+  	background-position: right bottom;
+  	margin-right: 200px;
+  	background-attachment: fixed;
+  	background-size: small;
+
+
 }
 
 .morepadding{
@@ -11,7 +22,7 @@ body.container-fluid{
 }
 
 .analysis {
-	color: #73b3f4;
+	color: #1da1f2;
 	font-size: 40px;
 	font-weight: 100;
 	text-align: center;
@@ -20,7 +31,7 @@ body.container-fluid{
 
 .howto {
 	font-weight: bold;
-	margin: 0 0 10% 0;
+	margin: -1% 0 5% 0;
 	text-align: center;
 
 }
@@ -28,3 +39,15 @@ body.container-fluid{
 .picture {
 	margin: 0 0 0 10%;
 }
+
+.searchoutput {
+	font-weight: bold;
+	text-align: center;
+	font-size: 20px;
+}
+
+
+
+
+
+

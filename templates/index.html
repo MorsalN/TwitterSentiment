@@ -17,16 +17,25 @@
 </head>
 
 <body class="container-fluid" >
+			<div class="col-md-12">
+				<div class="gif"></div>
+				<img src="static/giphy.gif"></img>
+			</div>
 
 	<div class="row">
-		<div class= "col-md-10">
+		<div class= "col-md-12">
+
 			<div class = "analysis"> Twitter Sentiment Analysis </div> <br/>
-			<div class = "howto"> Find the latest tweets and sentiment by typing below</div>
+			<div class = "howto"> Find the latest tweets and sentiment by typing below</div><br/>
 			<form method="GET", action="/twitter" class="morepadding">
     <input name="text">
     <input type="submit">
 </form>
-{{ text  }}
+<h1><div class=searchoutput> Sentiment for: {{ text  }}</div></h1>
+
+  {% for tweet in currenttweets %}
+    <div>{{ tweet }}</div>
+  {% endfor %}
 			<div class="col-md-2">
 				<div class="picture"></div>
 				<img src="static/cloudpic.png"></img>
