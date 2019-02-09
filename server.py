@@ -2,10 +2,69 @@ from flask import Flask, request, render_template
 from templates.TAnalyzer import TwitterNews
 import requests
 import pandas as pd
+import sqlite3
 
-all_tweets = []
+# a serrver just communitcate with a client it does not or is not intended to store 
+#REST api no client saving 
+#the problem with tweets.txt is that it's limiited because if I want to know who wrote that tweet it won;t let you test that 
+
+all_tweets = [] 
 
 app = Flask(__name__)
+conn = sqlite3.connect('twitter.db')
+
+c = conn.cursor()
+
+# Create table at the top of the table globally
+
+
+#this was added so you don't need to create one every single time it runs 
+c.execute("CREATE TABLE IF NOT EXISTS twittertable (id INTEGER PRIMARY KEY AUTOINCREMENT, tweet text)")
+#c.execute("CREATE TABLE IF NOT EXISTS tweettable (id INTEGER PRIMARY KEY AUTOINCREMENT, tweet text, FOREIGN KEY(user) REFERENCES user(id))")
+#c.execute("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, username text, password text)")
+
+
+# Insert a row of data
+
+
+def insert(tweet, c):
+    query = "INSERT INTO twittertable(tweet) VALUES ('{}')".format(tweet)
+    print(query)
+    c.execute(query)
+@app.route('/twitter_clone', methods = ['GET','POST'])
+def insert_table():
+    conn = sqlite3.connect('twitter.db')
+
+    c = conn.cursor()
+
+    #it it's a POST Input: a tweet    Output: 
+    if request.method == 'POST': #the client writes into the text then we receive a post from a form 
+        tweet = request.form['text'] #getting the tweet through the form 
+        insert(tweet, c)
+        conn.commit()
+    get_comments = select_table(c) 
+    return render_template('twitter_clone.html', get_comments=get_comments)
+    
+    
+def select_table(c):
+    #input: none
+    #output: tweets 
+    table = c.execute("select * from twittertable;")
+    return table.fetchall() 
+
+
+#tweets
+#id INT PRIMARY KEY AUTOINK
+#tweet - text 
+#user_id INT FOREIGN KEY 
+
+#user table 
+#id 
+#username
+#password  
+
+
+
 
 with open('/Users/MorsalNiyaz/Development/polyglot/cohort-1/data/positive_words.txt', 'r') as open_pos:
     positive_vocab=open_pos.readlines()
@@ -20,13 +79,12 @@ with open('/Users/MorsalNiyaz/Development/polyglot/cohort-1/data/negative_words.
 def my_form():
     return render_template('index.html')
 
-#@app.route('/twitter', methods=['GET'])
-#def my_form_post():
-
-    #text = request.args.get('text')
-    #currenttweets = get_tweets(text)
+@app.route('/twitter', methods=['GET'])
+def my_form_post():
+    text = request.args.get('text')
+    currenttweets = get_tweets(text)
     #print(currenttweets)
-    #return render_template('index.html', text=text, currenttweets=currenttweets)
+    return render_template('index.html', text=text, currenttweets=currenttweets)
 
 #this is a new route localhost:5000/tweets_list
 @app.route('/tweets_list', methods = ['GET','POST'])
@@ -59,7 +117,9 @@ def write_files(tweet):
     # Input: tweet (str)
     # Output: nothing
     with open('tweets.txt', 'a+') as f:
-        f.write(tweet + "\n")
+        y = f.write(tweet + "\n")
+        return y 
+
 
 
 #HELPER FUNCTION
@@ -82,10 +142,10 @@ def get_tweets(searchitem):
         #print(sentimenttweet)
         # {'sentiment': 'positive', 'tweet': 'i love twitter'} -structure of a dictionary
         actualtweets = {}  #a dictionary
-        actualtweets["SENTIMENT"] = sentiment #the key - the right hand side is calling the sentiment tweets made from above 
-        actualtweets["TWEET"] = tweet #the value
-        actualtweets["POSPERCENT"] = percentagepos
-        actualtweets["NEGPERCENT"] = percentageneg
+        actualtweets["Sentiment"] = sentiment #the key - the right hand side is calling the sentiment tweets made from above 
+        actualtweets["Tweet"] = tweet #the value
+        actualtweets["Percent Positive"] = percentagepos
+        actualtweets["Percent Negative"] = percentageneg
 
         #print(actualtweets) 
 
@@ -94,7 +154,7 @@ def get_tweets(searchitem):
     
     return tweetlist
 
-    data = pd.DataFrame(data=[actualtweets], columns=['Tweets'])
+    #data = pd.DataFrame(data=[actualtweets], columns=['Tweets'])
 
 
 if __name__ == '__main__':
